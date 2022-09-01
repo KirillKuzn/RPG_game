@@ -39,3 +39,18 @@ class Player(p.sprite.Sprite):
         self.velocity *= Player.speed
         self.rect.center += self.velocity
 
+    def _load_images(self, sheet):
+        self.go_up = []
+        self.go_down = []
+        self.go_right = []
+        self.go_left = []
+
+        w = sheet.w // 4
+        h = sheet.h // 4
+        for x in range(0, sheet.w, w):
+            self.go_down.append(sheet.get_image(x, 0, w, h))
+            self.go_left.append(sheet.get_image(x, h, w, h))
+            self.go_right.append(sheet.get_image(x, h * 2, w, h))
+            self.go_up.append(sheet.get_image(x, h * 3, w, h))
+
+
