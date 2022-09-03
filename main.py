@@ -7,10 +7,10 @@ p.init()
 
 win = p.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 p.display.set_caption(GAME_TITLE)
-p.display.set_icon(p.image.load(res/'frog.png'))
+p.display.set_icon(p.image.load(res/'sprites'/'frog.png'))
 Clock = p.time.Clock()
 
-player = Player(res/'player_sheet.png', (100, 100))
+player = Player(res/'sprites'/'player_sheet.png', (100, 100))
 all_sprites = p.sprite.Group()
 all_sprites.add(player)
 

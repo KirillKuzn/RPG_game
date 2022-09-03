@@ -13,4 +13,4 @@ class SpaceSheet:
         return self.sheet.subsurface(x, y, width, height)
 
 
-res = Path("sprites")
+res = Path("res")

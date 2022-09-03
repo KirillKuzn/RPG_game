@@ -11,19 +11,26 @@ class Player(p.sprite.Sprite):
         super().__init__()
 
         self.sprite_sheet = SpaceSheet(image_path)
-        self.image = self.sprite_sheet.get_image(0, 0, 32, 32)
+        self.circle_len = 4
+        self._load_images(self.sprite_sheet)
+        self.image = self.go_down[0]
         self.rect = self.image.get_rect()
         self.rect.center = pos
 
+        self.velocity = Vector2(0, 0)
+        self.last_update = 0
+        self.frame = 0
+
     def update(self):
         self._move()
+        self._animate()
 
     def _move(self):
         '''
         This method is responsible for the movement of the character
         :return: None
         '''
-        self.velocity = Vector2(0, 0)
+        self.velocity.update(0, 0)
         keys = p.key.get_pressed()
         if keys[p.K_w]:
             self.velocity.y = -1
@@ -40,17 +47,37 @@ class Player(p.sprite.Sprite):
         self.rect.center += self.velocity
 
     def _load_images(self, sheet):
+        '''
+        This method splits one picture into sixteen and allocates them into 4 lists
+        '''
         self.go_up = []
         self.go_down = []
         self.go_right = []
         self.go_left = []
 
-        w = sheet.w // 4
-        h = sheet.h // 4
+        w = sheet.w // self.circle_len
+        h = sheet.h // self.circle_len
         for x in range(0, sheet.w, w):
             self.go_down.append(sheet.get_image(x, 0, w, h))
             self.go_left.append(sheet.get_image(x, h, w, h))
             self.go_right.append(sheet.get_image(x, h * 2, w, h))
             self.go_up.append(sheet.get_image(x, h * 3, w, h))
+
+    def _animate(self):
+        now = p.time.get_ticks()
+        if now - self.last_update > self.circle_len and self.velocity.length() > 0:
+            self.last_update = now
+            if self.velocity.y < 0:
+                self.current_anim = self.go_up
+            if self.velocity.y > 0:
+                self.current_anim = self.go_down
+            if self.velocity.x < 0:
+                self.current_anim = self.go_left
+            if self.velocity.x > 0:
+                self.current_anim = self.go_right
+
+            self.frame = (self.frame + 1) % self.circle_len
+            self.image = self.current_anim[self.frame]
+
 
 
