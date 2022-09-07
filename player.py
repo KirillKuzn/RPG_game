@@ -64,6 +64,9 @@ class Player(p.sprite.Sprite):
             self.go_up.append(sheet.get_image(x, h * 3, w, h))
 
     def _animate(self):
+        '''
+        This method is responsible for the animation of the movement of our character
+        '''
         now = p.time.get_ticks()
         if now - self.last_update > self.circle_len and self.velocity.length() > 0:
             self.last_update = now

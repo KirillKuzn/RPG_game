@@ -3,26 +3,43 @@ from settings import *
 from player import Player
 from helper import res
 
-p.init()
+class Game:
+    def __init__(self):
+        p.init()
 
-win = p.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-p.display.set_caption(GAME_TITLE)
-p.display.set_icon(p.image.load(res/'sprites'/'frog.png'))
-Clock = p.time.Clock()
+        self.win = p.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        p.display.set_caption(GAME_TITLE)
+        p.display.set_icon(p.image.load(res / 'sprites' / 'frog.png'))
+        self.Clock = p.time.Clock()
+        self.running = 1
 
-player = Player(res/'sprites'/'player_sheet.png', (100, 100))
-all_sprites = p.sprite.Group()
-all_sprites.add(player)
+    def new(self):
+        player = Player(res / 'sprites' / 'player_sheet.png', (100, 100))
+        self.all_sprites = p.sprite.Group()
+        self.all_sprites.add(player)
 
-running = 1
-while running:
-    for event in p.event.get():
-        if event.type == p.QUIT or (event.type == p.KEYDOWN and event.key == p.K_ESCAPE):
-            running = 0
+    def _events(self):
+        for event in p.event.get():
+            if event.type == p.QUIT or (event.type == p.KEYDOWN and event.key == p.K_ESCAPE):
+                self.running = 0
 
-    win.fill((255, 255, 255))
-    all_sprites.draw(win)
-    player.update()
+    def _update(self):
+        self.all_sprites.update()
 
-    Clock.tick(FPS)
-    p.display.flip()
+    def _draw(self):
+        self.win.fill((255, 255, 255))
+        self.all_sprites.draw(self.win)
+        p.display.flip()
+
+    def run(self):
+        while self.running:
+            self._events()
+            self._update()
+            self._draw()
+            self.Clock.tick(FPS)
+
+
+if __name__ == '__main__':
+    game = Game()
+    game.new()
+    game.run()
