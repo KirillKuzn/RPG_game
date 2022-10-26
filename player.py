@@ -1,14 +1,15 @@
 from helper import SpaceSheet
 import pygame as p
 from pygame.math import Vector2
+from settings import *
 
 
 class Player(p.sprite.Sprite):
     '''A class that realizes the behavior of a character'''
     speed = 5
 
-    def __init__(self, image_path, pos):
-        super().__init__()
+    def __init__(self, game, image_path, pos):
+        super().__init__(game.all_sprites)
 
         self.sprite_sheet = SpaceSheet(image_path)
         self.circle_len = 4
@@ -16,6 +17,7 @@ class Player(p.sprite.Sprite):
         self.image = self.go_down[0]
         self.rect = self.image.get_rect()
         self.rect.center = pos
+        self._layer = PLAYER_LAYER
 
         self.velocity = Vector2(0, 0)
         self.last_update = 0

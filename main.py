@@ -4,6 +4,7 @@ from player import Player
 from helper import res
 from world import TileMap
 
+
 class Game:
     def __init__(self):
         '''
@@ -16,15 +17,17 @@ class Game:
         p.display.set_icon(p.image.load(res / 'sprites' / 'frog.png'))
         self.Clock = p.time.Clock()
         self.running = 1
-        self.map = TileMap(res/'map'/'map1.csv', res/'map'/'14389872632b38dd525b21.68139357rpg_tileset.png')
 
     def new(self):
         '''
         There are all sprites.
         '''
-        player = Player(res / 'sprites' / 'player_sheet.png', (100, 100))
-        self.all_sprites = p.sprite.Group()
+
+        self.all_sprites = p.sprite.LayeredUpdates()
+        player = Player(self, res / 'sprites' / 'player_sheet.png', (100, 100))
         self.all_sprites.add(player)
+        self.map = TileMap(self, res / 'map' / 'map.csv',
+                           res / 'map' / '14389872632b38dd525b21.68139357rpg_tileset.png', 16)
 
     def _events(self):
         '''
