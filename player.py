@@ -9,15 +9,17 @@ class Player(p.sprite.Sprite):
     speed = 5
 
     def __init__(self, game, image_path, pos):
+        self._layer = PLAYER_LAYER
         super().__init__(game.all_sprites)
 
         self.sprite_sheet = SpaceSheet(image_path)
+        self.game = game
         self.circle_len = 4
         self._load_images(self.sprite_sheet)
         self.image = self.go_down[0]
         self.rect = self.image.get_rect()
         self.rect.center = pos
-        self._layer = PLAYER_LAYER
+
 
         self.velocity = Vector2(0, 0)
         self.last_update = 0
@@ -46,7 +48,17 @@ class Player(p.sprite.Sprite):
         if self.velocity.length() > 1:
             self.velocity.x = 0
         self.velocity *= Player.speed
-        self.rect.center += self.velocity
+        if not self._check_walls():
+            self.rect.center += self.velocity
+
+
+    def _check_walls(self):
+        target_player = self.rect.move(self.velocity)
+        for target_wall in self.game.walls:
+            if target_player.colliderect(target_wall):
+                return True
+        return False
+
 
     def _load_images(self, sheet):
         '''
